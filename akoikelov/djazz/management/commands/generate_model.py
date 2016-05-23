@@ -20,22 +20,17 @@ class Command(BaseCommand):
             self.stderr.write('Given package %s doesn\'t exist!' % package)
             return
 
-        generator = ModelGenerator(model_name)
+        model_skeleton = open(os.path.dirname(__file__) + '/skeleton/model.py.skeleton').read()
+        models_file_resource = open(package_dir + '/models.py', 'a')
+        generator = ModelGenerator(model_name, model_skeleton, models_file_resource)
         finished = False
-        fields = None
 
         while not finished:
-            finished, fields = generator.ask()
+            finished = generator.ask()
             self.stdout.write('\n')
 
             if finished:
                 break
 
-        module_path = os.path.dirname(__file__)
-        model_skeleton = open(module_path + '/skeleton/model.py.skeleton').read()
-        models_file = open(package_dir + '/models.py', 'a')
-
-        models_file.write(model_skeleton % (model_name, fields))
-        models_file.close()
-
+        generator.generate()
         self.stdout.write('all done!')

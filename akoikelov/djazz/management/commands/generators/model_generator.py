@@ -1,9 +1,11 @@
 class ModelGenerator(object):
 
-    def __init__(self, model_name):
+    def __init__(self, model_name, model_skeleton, models_file_resource):
         self.model_name = model_name
+        self.model_skeleton = model_skeleton
+        self.models_file_resource = models_file_resource
         self.templates = dict(
-            field='%s = django.db.models.%s(%s)',
+            field='%s = models.%s(%s)',
             max_length='max_length=%s',
             null='null=%s',
             verbose_name='verbose_name=\'%s\'',
@@ -16,15 +18,7 @@ class ModelGenerator(object):
         name = raw_input('Field name?')
 
         if name == '':
-            result = ''
-
-            for i in range(0, len(self.fields)):
-                if i == (len(self.fields) - 1):
-                    result += self.fields[i]
-                else:
-                    result += self.fields[i] + '\n'
-
-            return True, result
+            return True
 
         type = raw_input('Field type?')
         verbose_name = self.templates['verbose_name'] % raw_input('Verbose name?')
@@ -34,4 +28,16 @@ class ModelGenerator(object):
         field = self.templates['field'] % (name, type, '%s, %s, %s' % (max_length, null, verbose_name))
         self.fields.append(field)
 
-        return False, ''
+        return False
+
+    def generate(self):
+        result = ''
+
+        for i in range(0, len(self.fields)):
+            if i == (len(self.fields) - 1):
+                result += self.fields[i]
+            else:
+                result += self.fields[i] + '\n'
+
+        self.models_file_resource.write(self.model_skeleton % (self.model_name, result))
+        self.models_file_resource.close()

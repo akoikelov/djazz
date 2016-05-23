@@ -1,11 +1,12 @@
 from distutils.core import setup
+from setuptools import find_packages
 
 setup(
-    name='djazz',
+    name='akoikelov.djazz',
     version='1.0',
-    packages=['akoikelov', 'akoikelov.djazz',
-              'akoikelov.djazz.management', 'akoikelov.djazz.management.commands',
-              'akoikelov.djazz.management.commands.generators'],
+    packages=find_packages(),
+    package_data={'akoikelov.djazz.management.commands.skeleton': ['*.skeleton']},
+    include_package_data=True,
     url='https://github.com/akoikelov/djazz',
     license='',
     author='akoikelov',

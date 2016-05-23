@@ -1,10 +1,10 @@
 
 
 
-class %s(django.db.models.Model):
+class %s(models.Model):
     %s
-    created_at = django.db.models.DateTimeField(auto_now_add=True, null=True)
-    updated_at = django.db.models.DateTimeField(auto_now=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
 
     def __unicode__(self):
         return ''
