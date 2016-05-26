@@ -3,9 +3,15 @@ from django.template import Template, Context
 
 class ModelGenerator(object):
 
-    FIELDS_TYPE_AUTOCOMPLETE = [
+    FIELD_TYPE_AUTOCOMPLETE_KEYWORDS = [
         'char', 'text', 'date', 'datetime', 'decimal',
         'email', 'float', 'int', 'url', 'bool', 'nullbool', 'fkey'
+    ]
+    FIELD_TYPES_WITH_MAX_LENGTH_OPTION = [
+        'CharField', 'DecimalField', 'EmailField', 'FloatField', 'IntegerField', 'URLField'
+    ]
+    FIELD_TYPES_WITH_UNIQUE_OPTION = [
+        'CharField', 'TextField'
     ]
 
     def __init__(self, model_name, model_skeleton, models_file_resource, command_instance):
@@ -17,11 +23,10 @@ class ModelGenerator(object):
             max_length='max_length=%s',
             null='null=%s',
             blank='blank=%s',
-            unique='unique=%',
+            unique='unique=%s',
             verbose_name='verbose_name=\'%s\'',
             auto_now_add='auto_now_add=%s',
             auto_now='auto_now=%s',
-            fkey_model='%s',
             on_del='on_delete=%s',
             to='to=%s'
         )
@@ -34,28 +39,42 @@ class ModelGenerator(object):
         self.command_instance = command_instance
 
     def ask(self):
+        field_options = ''
         field_name = raw_input('Field name? ')
 
         if field_name == '':
             return True
 
-        field_type = self.fieldTypePairs[raw_input('Field type? ')]
-        verbose_name = self.templates['verbose_name'] % field_name
-        max_length = self.templates['max_length'] % raw_input('Max length? ')
-        nullable = raw_input('Null?[False] ')
+        guessed_field_type = self.guess_field_type(field_name)
 
-        if nullable == '':
-            nullable = self.templates['null'] % 'False'
+        if guessed_field_type != '':
+            field_type = raw_input('Field type?[%s] ' % guessed_field_type)
+            field_type = self.fieldTypePairs[guessed_field_type] if field_type == '' else self.fieldTypePairs[field_type]
         else:
-            nullable = self.templates['null'] % nullable
+            field_type = self.fieldTypePairs[raw_input('Field type? ')]
+
+        field_options += self.templates['verbose_name'] % field_name
+
+        if field_type in self.FIELD_TYPES_WITH_MAX_LENGTH_OPTION:
+            field_options += ', ' + self.templates['max_length'] % raw_input('Max length? ')
+
+        if field_type in self.FIELD_TYPES_WITH_UNIQUE_OPTION:
+            unique = raw_input('Unique?[False] ')
+            field_options += ', ' + self.templates['unique'] % 'False' if unique == '' else ', ' + self.templates['unique'] % unique
+
+        if field_type == 'ForeignKey':
+            field_options += ', ' + self.templates['to'] % raw_input('Related model name? ')
+
+            on_delete = raw_input('On delete?[True] ')
+            field_options += ', ' + self.templates['on_del'] % 'True' if on_delete == '' else ', ' +  self.templates['on_del'] % on_delete
+
+        nullable = raw_input('Null?[False] ')
+        field_options += ', ' + self.templates['null'] % 'False' if nullable == '' else ', ' + self.templates['null'] % nullable
 
         self.command_instance.stdout.write('\n')
-        add_more_fields = raw_input('Add more fields?[yes]')
+        self.fields.append(self.templates['field'] % (field_name, field_type, field_options))
 
-        field = self.templates['field'] % (field_name, field_type, '%s, %s, %s' % (max_length, nullable, verbose_name))
-        self.fields.append(field)
-
-        if add_more_fields == 'no':
+        if raw_input('Add more fields?[yes]').lower() == 'no':
             return True
 
         return False
@@ -68,3 +87,11 @@ class ModelGenerator(object):
 
         self.models_file_resource.write(generated)
         self.models_file_resource.close()
+
+    def guess_field_type(self, field_name):
+        if field_name.startswith('is'):
+            return 'bool'
+        elif field_name.endswith('at'):
+            return 'datetime'
+        else:
+            return ''
