@@ -5,7 +5,7 @@ class ModelGenerator(object):
 
     FIELD_TYPE_AUTOCOMPLETE_KEYWORDS = [
         'char', 'text', 'date', 'datetime', 'decimal',
-        'email', 'float', 'int', 'url', 'bool', 'nullbool', 'fkey'
+        'email', 'float', 'int', 'url', 'bool', 'nullbool', 'fkey', 'mtm'
     ]
     FIELD_TYPES_WITH_MAX_LENGTH_OPTION = [
         'CharField', 'DecimalField', 'EmailField', 'FloatField', 'IntegerField', 'URLField'
@@ -28,17 +28,21 @@ class ModelGenerator(object):
             auto_now_add='auto_now_add=%s',
             auto_now='auto_now=%s',
             on_del='on_delete=%s',
-            to='to=%s'
+            to='to=%s',
+            through='through=\'%s\'',
+            through_fields='through_fields=(\'%s\', \'%s\')'
         )
         self.fieldTypePairs = dict(
             char='CharField', text='TextField', date='DateField', datetime='DateTimeField',
             decimal='DecimalField', email='EmailField', float='FloatField', int='IntegerField',
-            url='URLField', bool='BooleanField', nullbool='NullBooleanField', fkey='ForeignKey'
+            url='URLField', bool='BooleanField', nullbool='NullBooleanField', fkey='ForeignKey',
+            mtm='ManyToManyField'
         )
         self.fields = []
         self.command_instance = command_instance
 
     def ask(self):
+        has_relation = False  # we have to comment model field line with relation if related model doesn't exist yet
         field_options = ''
         field_name = raw_input('Field name? ')
 
@@ -68,12 +72,27 @@ class ModelGenerator(object):
 
             on_delete = raw_input('On delete?[models.CASCADE] ')
             field_options += ', ' + self.templates['on_del'] % 'models.CASCADE' if on_delete == '' else ', ' + self.templates['on_del'] % on_delete
+            has_relation = True
+
+        if field_type == 'ManyToManyField':
+            related_model = raw_input('ManyToMany model name? ')
+            through_model = self.templates['through'] % raw_input('Through model?: ')
+            through_fields = self.templates['through_fields'] % (self.model_name.lower(), related_model.lower())
+
+            related_model = self.templates['to'] % related_model
+
+            field_options += ', %s, %s, %s' % (related_model, through_model, through_fields)
+            has_relation = True
 
         nullable = raw_input('Null?[False] ')
         field_options += ', ' + self.templates['null'] % 'False' if nullable == '' else ', ' + self.templates['null'] % nullable
 
         self.command_instance.stdout.write('\n')
-        self.fields.append(self.templates['field'] % (field_name, field_type, field_options))
+
+        if has_relation:
+            self.fields.append('#' + self.templates['field'] % (field_name, field_type, field_options))
+        else:
+            self.fields.append(self.templates['field'] % (field_name, field_type, field_options))
 
         if raw_input('Add more fields?[yes]').lower() == 'no':
             return True
