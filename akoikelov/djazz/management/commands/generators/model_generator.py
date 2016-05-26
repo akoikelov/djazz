@@ -11,7 +11,7 @@ class ModelGenerator(object):
         'CharField', 'DecimalField', 'EmailField', 'FloatField', 'IntegerField', 'URLField'
     ]
     FIELD_TYPES_WITH_UNIQUE_OPTION = [
-        'CharField', 'TextField'
+        'CharField'
     ]
 
     def __init__(self, model_name, model_skeleton, models_file_resource, command_instance):
@@ -63,10 +63,11 @@ class ModelGenerator(object):
             field_options += ', ' + self.templates['unique'] % 'False' if unique == '' else ', ' + self.templates['unique'] % unique
 
         if field_type == 'ForeignKey':
-            field_options += ', ' + self.templates['to'] % raw_input('Related model name? ')
+            related_model = raw_input('Related model name?[%s] ' % field_name.capitalize())
+            field_options += ', ' + self.templates['to'] % field_name.capitalize() if related_model == '' else ', ' + self.templates['to'] % related_model
 
-            on_delete = raw_input('On delete?[True] ')
-            field_options += ', ' + self.templates['on_del'] % 'True' if on_delete == '' else ', ' +  self.templates['on_del'] % on_delete
+            on_delete = raw_input('On delete?[models.CASCADE] ')
+            field_options += ', ' + self.templates['on_del'] % 'models.CASCADE' if on_delete == '' else ', ' + self.templates['on_del'] % on_delete
 
         nullable = raw_input('Null?[False] ')
         field_options += ', ' + self.templates['null'] % 'False' if nullable == '' else ', ' + self.templates['null'] % nullable
@@ -91,7 +92,7 @@ class ModelGenerator(object):
     def guess_field_type(self, field_name):
         if field_name.startswith('is'):
             return 'bool'
-        elif field_name.endswith('at'):
+        elif field_name.endswith('_at'):
             return 'datetime'
         else:
             return ''
