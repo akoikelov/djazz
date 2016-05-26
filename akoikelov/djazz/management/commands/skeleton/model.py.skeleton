@@ -1,10 +1,10 @@
 
-
 {% autoescape off %}
 class {{ model_name }}(models.Model):
-    {% for field in fields %}{{ field }}{% endfor %}
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True, null=True)
+    {% for field in fields %}{{ field }}
+    {% endfor %}
+    created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name='created_at')
+    updated_at = models.DateTimeField(auto_now=True, null=True, verbose_name='updated_at')
 
     def __unicode__(self):
         return ''

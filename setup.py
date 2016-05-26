@@ -7,9 +7,10 @@ setup(
     packages=find_packages(),
     package_data={'akoikelov.djazz.management.commands.skeleton': ['*.skeleton']},
     include_package_data=True,
+    requires=['django'],
     url='https://github.com/akoikelov/djazz',
     license='',
     author='akoikelov',
     author_email='kolyakoikelov@gmail.com',
-    description='Djazz is helper library for Django framework'
+    description='Djazz is helper library for Django framework',
 )
