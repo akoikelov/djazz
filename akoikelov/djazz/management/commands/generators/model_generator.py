@@ -13,6 +13,9 @@ class ModelGenerator(object):
     FIELD_TYPES_WITH_UNIQUE_OPTION = [
         'CharField'
     ]
+    FIELD_TYPES_WITHOUT_NULL_OPTION = [
+        'ManyToManyField'
+    ]
 
     def __init__(self, model_name, model_skeleton, models_file_resource, command_instance):
         self.model_name = model_name
@@ -84,8 +87,9 @@ class ModelGenerator(object):
             field_options += ', %s, %s, %s' % (related_model, through_model, through_fields)
             has_relation = True
 
-        nullable = raw_input('Null?[False] ')
-        field_options += ', ' + self.templates['null'] % 'False' if nullable == '' else ', ' + self.templates['null'] % nullable
+        if field_type not in self.FIELD_TYPES_WITHOUT_NULL_OPTION:
+            nullable = raw_input('Null?[False] ')
+            field_options += ', ' + self.templates['null'] % 'False' if nullable == '' else ', ' + self.templates['null'] % nullable
 
         self.command_instance.stdout.write('\n')
 
