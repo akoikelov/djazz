@@ -98,7 +98,7 @@ class ModelGenerator(object):
         else:
             self.fields.append(self.templates['field'] % (field_name, field_type, field_options))
 
-        if raw_input('Add more fields?[yes]').lower() == 'no':
+        if raw_input('Add more fields?[yes] ').lower() == 'no':
             return True
 
         return False
