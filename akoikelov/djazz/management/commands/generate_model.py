@@ -33,3 +33,7 @@ class Command(BaseCommand):
 
         generator.generate()
         self.stdout.write(self.style.SUCCESS('Model %s successfully generated!' % model_name))
+
+    def execute(self, *args, **options):
+        super(Command, self).execute(*args, **options)
+        return 0

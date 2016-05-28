@@ -41,13 +41,14 @@ for dirpath, dirnames, filenames in os.walk(extensions_dir):
         package_files = package_data.setdefault('.'.join(parts), [])
         package_files.extend([os.path.join(path, f) for f in filenames])
 
+
 setup(
     name='akoikelov.djazz',
     version='1.0',
     packages=packages,
     package_data=package_data,
     include_package_data=True,
-    requires=['django', 'setuptools'],
+    requires=['django', 'setuptools', 'mock'],
     url='https://github.com/akoikelov/djazz',
     license='',
     author='akoikelov',

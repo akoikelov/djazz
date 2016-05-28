@@ -46,6 +46,7 @@ class ModelGenerator(object):
 
     def ask(self):
         has_relation = False  # we have to comment model field line with relation if related model doesn't exist yet
+        typed_right_field_type = False
         field_options = ''
         field_name = raw_input('Field name? ')
 
@@ -55,10 +56,22 @@ class ModelGenerator(object):
         guessed_field_type = self.guess_field_type(field_name)
 
         if guessed_field_type != '':
-            field_type = raw_input('Field type?[%s] ' % guessed_field_type)
-            field_type = self.fieldTypePairs[guessed_field_type] if field_type == '' else self.fieldTypePairs[field_type]
+            while not typed_right_field_type:
+                field_type = raw_input('Field type?[%s] ' % guessed_field_type)
+                if field_type == '' or field_type in self.FIELD_TYPE_AUTOCOMPLETE_KEYWORDS:
+                    field_type = self.fieldTypePairs[guessed_field_type]
+                    typed_right_field_type = True
+                else:
+                    self.command_instance.stdout.write('\nWrong type! Choose one from list: ' + self.FIELD_TYPE_AUTOCOMPLETE_KEYWORDS.__str__())
+
         else:
-            field_type = self.fieldTypePairs[raw_input('Field type? ')]
+            while not typed_right_field_type:
+                field_type = raw_input('Field type? ')
+                if field_type not in self.FIELD_TYPE_AUTOCOMPLETE_KEYWORDS:
+                    self.command_instance.stdout.write('\nWrong type! Choose one from list: ' + self.FIELD_TYPE_AUTOCOMPLETE_KEYWORDS.__str__())
+                else:
+                    field_type = self.fieldTypePairs[field_type]
+                    typed_right_field_type = True
 
         field_options += self.templates['verbose_name'] % field_name
 
