@@ -44,7 +44,7 @@ class TestGenerateModelCommand(TestCase):
     def setUp(self):
         self.mock = RawInputMock()
 
-        if not os.path.exists(settings.BASE_DIR + '/akoikelov_djazz_test_app'):
+        if not os.path.exists(os.getcwd() + '/akoikelov_djazz_test_app'):
             call_command('startapp', 'akoikelov_djazz_test_app')
 
     def test_generate_primitive_field(self):

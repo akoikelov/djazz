@@ -2,7 +2,6 @@ import os
 import akoikelov
 from akoikelov.djazz.management.commands.generators.model_generator import ModelGenerator
 from django.core.management.base import BaseCommand, CommandError
-from django.conf import settings
 
 
 class Command(BaseCommand):
@@ -17,7 +16,7 @@ class Command(BaseCommand):
         package = options['package']
         model_name = options['model_name']
 
-        package_dir = settings.BASE_DIR + '/' + package
+        package_dir = os.getcwd() + '/' + package
 
         if not os.path.exists(package_dir):
             raise CommandError('Given package %s doesn\'t exist!' % package)
