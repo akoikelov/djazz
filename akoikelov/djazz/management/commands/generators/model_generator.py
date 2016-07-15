@@ -8,7 +8,7 @@ class ModelGenerator(object):
         'email', 'float', 'int', 'url', 'bool', 'nullbool', 'fkey', 'mtm'
     ]
     FIELD_TYPES_WITH_MAX_LENGTH_OPTION = [
-        'CharField', 'DecimalField', 'EmailField', 'FloatField', 'IntegerField', 'URLField'
+        'CharField', 'EmailField', 'URLField'
     ]
     FIELD_TYPES_WITH_UNIQUE_OPTION = [
         'CharField'
