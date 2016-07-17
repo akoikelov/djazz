@@ -1,6 +1,6 @@
 {% autoescape off %}
 class {{ admin_name }}(admin.ModelAdmin):
-    list_display = ['']
+    pass
 {% endautoescape %}
 admin.site.register({{ model_name }}, {{ admin_name }})
 

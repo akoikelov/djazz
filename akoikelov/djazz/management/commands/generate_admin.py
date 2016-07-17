@@ -16,7 +16,7 @@ class Command(BaseCommand):
         package = options['package']
         model_name = options['model_name']
 
-        package_dir = os.getcwd() + '/' + package
+        package_dir = os.path.join(os.getcwd(), package)
         model_skeleton = open(os.path.join(akoikelov.djazz.__path__[0], 'conf', ) + '/model_class_template/admin.py-tpl').read()
         admin_file_resource = open(package_dir + '/admin.py', 'a')
 
