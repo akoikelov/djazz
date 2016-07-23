@@ -1,4 +1,5 @@
 import os
+from django.core.management import call_command
 import akoikelov
 from akoikelov.djazz.management.commands.generators.model_generator import ModelGenerator
 from django.core.management.base import BaseCommand, CommandError
@@ -32,6 +33,7 @@ class Command(BaseCommand):
 
         generator.generate()
         self.stdout.write(self.style.SUCCESS('Model %s successfully generated!' % model_name))
+        call_command('generate_admin', package, model_name)
 
     def execute(self, *args, **options):
         super(Command, self).execute(*args, **options)
