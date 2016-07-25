@@ -49,6 +49,7 @@ class ModelGenerator(object):
         typed_right_field_type = False
         field_options = ''
         field_name = raw_input('Field name? ')
+        field_type = ''
 
         if field_name == '':
             return True

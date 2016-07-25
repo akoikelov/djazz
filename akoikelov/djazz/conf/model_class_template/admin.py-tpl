@@ -1,6 +1,6 @@
 {% autoescape off %}
 class {{ admin_name }}(admin.ModelAdmin):
-    pass
+    list_display = [{% for f in fields %}'{{ f }}', {% endfor %}]
 {% endautoescape %}
 admin.site.register({{ model_name }}, {{ admin_name }})
 
