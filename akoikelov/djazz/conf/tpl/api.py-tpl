@@ -1,0 +1,6 @@
+{% autoescape off %}
+class {{ model_name }}Resource(ModelResource):
+    class Meta:
+      queryset = {{ model_name }}.objects.all()
+      name = '{{ model_name }}'
+{% endautoescape %}
