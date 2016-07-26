@@ -44,7 +44,7 @@ for dirpath, dirnames, filenames in os.walk(extensions_dir):
 
 setup(
     name='akoikelov.djazz',
-    version='1.0.1',
+    version='1.0.2',
     packages=packages,
     package_data=package_data,
     include_package_data=True,
