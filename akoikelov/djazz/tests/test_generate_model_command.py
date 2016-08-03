@@ -2,7 +2,6 @@ import os
 from django.core.management import call_command
 from django.test import TestCase
 from mock import mock
-from django.conf import settings
 
 
 class RawInputMock(object):
@@ -44,20 +43,20 @@ class TestGenerateModelCommand(TestCase):
     def setUp(self):
         self.mock = RawInputMock()
 
-        if not os.path.exists(settings.BASE_DIR + '/akoikelov_djazz_test_app'):
-            call_command('startapp', 'akoikelov_djazz_test_app')
+        if not os.path.exists(os.getcwd() + '/dummytestappforgeneratemodel'):
+            call_command('startapp', 'dummytestappforgeneratemodel')
 
     def test_generate_primitive_field(self):
         with mock.patch('__builtin__.raw_input', self.mock.primitive_field_mock):
-            result = call_command('generate_model', 'akoikelov_djazz_test_app', 'TestPrimitive')
+            result = call_command('generate_model', 'dummytestappforgeneratemodel', 'TestPrimitive')
             self.assertEqual(result, self.SUCCESS_CODE)
 
     def test_generate_foreignkey_field(self):
         with mock.patch('__builtin__.raw_input', self.mock.foreignkey_field_mock):
-            result = call_command('generate_model', 'akoikelov_djazz_test_app', 'TestForeignKey')
+            result = call_command('generate_model', 'dummytestappforgeneratemodel', 'TestForeignKey')
             self.assertEqual(result, self.SUCCESS_CODE)
 
     def test_generate_manytomany_field(self):
         with mock.patch('__builtin__.raw_input', self.mock.manytomany_field_mock):
-            result = call_command('generate_model', 'akoikelov_djazz_test_app', 'TestManyToMany')
+            result = call_command('generate_model', 'dummytestappforgeneratemodel', 'TestManyToMany')
             self.assertEqual(result, self.SUCCESS_CODE)

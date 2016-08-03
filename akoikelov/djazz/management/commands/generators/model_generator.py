@@ -8,7 +8,7 @@ class ModelGenerator(object):
         'email', 'float', 'int', 'url', 'bool', 'nullbool', 'fkey', 'mtm'
     ]
     FIELD_TYPES_WITH_MAX_LENGTH_OPTION = [
-        'CharField', 'DecimalField', 'EmailField', 'FloatField', 'IntegerField', 'URLField'
+        'CharField', 'EmailField', 'URLField'
     ]
     FIELD_TYPES_WITH_UNIQUE_OPTION = [
         'CharField'
@@ -49,6 +49,7 @@ class ModelGenerator(object):
         typed_right_field_type = False
         field_options = ''
         field_name = raw_input('Field name? ')
+        field_type = ''
 
         if field_name == '':
             return True

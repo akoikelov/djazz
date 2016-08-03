@@ -2,7 +2,6 @@ import os
 import akoikelov
 from akoikelov.djazz.management.commands.generators.model_generator import ModelGenerator
 from django.core.management.base import BaseCommand, CommandError
-from django.conf import settings
 
 
 class Command(BaseCommand):
@@ -10,19 +9,19 @@ class Command(BaseCommand):
     help = 'Generates model class'
 
     def add_arguments(self, parser):
-        parser.add_argument('package', type=str)
+        parser.add_argument('app_name', type=str)
         parser.add_argument('model_name', type=str)
 
     def handle(self, *args, **options):
-        package = options['package']
+        package = options['app_name']
         model_name = options['model_name']
 
-        package_dir = settings.BASE_DIR + '/' + package
+        package_dir = os.getcwd() + '/' + package
 
         if not os.path.exists(package_dir):
             raise CommandError('Given package %s doesn\'t exist!' % package)
 
-        model_skeleton = open(os.path.join(akoikelov.djazz.__path__[0], 'conf', ) + '/model_class_template/model.py-tpl').read()
+        model_skeleton = open(os.path.join(akoikelov.djazz.__path__[0], 'conf', ) + '/tpl/model.py-tpl').read()
         models_file_resource = open(package_dir + '/models.py', 'a')
         generator = ModelGenerator(model_name, model_skeleton, models_file_resource, self)
         finished = False

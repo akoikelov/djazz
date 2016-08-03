@@ -2,3 +2,17 @@
 setup.py
 akoikelov/__init__.py
 akoikelov/djazz/__init__.py
+akoikelov/djazz/conf/tpl/admin.py-tpl
+akoikelov/djazz/conf/tpl/api.py-tpl
+akoikelov/djazz/conf/tpl/model.py-tpl
+akoikelov/djazz/management/__init__.py
+akoikelov/djazz/management/commands/__init__.py
+akoikelov/djazz/management/commands/generate_admin.py
+akoikelov/djazz/management/commands/generate_api.py
+akoikelov/djazz/management/commands/generate_model.py
+akoikelov/djazz/management/commands/generators/__init__.py
+akoikelov/djazz/management/commands/generators/admin_generator.py
+akoikelov/djazz/management/commands/generators/api_generator.py
+akoikelov/djazz/management/commands/generators/model_generator.py
+akoikelov/djazz/tests/__init__.py
+akoikelov/djazz/tests/test_generate_model_command.py
