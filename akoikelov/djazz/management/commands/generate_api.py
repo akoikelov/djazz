@@ -6,6 +6,7 @@ from akoikelov.djazz.management.commands.generators.api_generator import ApiGene
 
 
 class Command(BaseCommand):
+
     help = 'Generates api resource class for app models'
 
     def add_arguments(self, parser):
@@ -21,7 +22,7 @@ class Command(BaseCommand):
         api_skeleton = open(os.path.join(akoikelov.djazz.__path__[0], 'conf', ) + '/tpl/api.py-tpl').read()
         api_file_resource = open(package_dir + '/api.py', 'a')
         urls = []
-        urls_skeleton = "    url(r'^api/', include(%s().urls)),\n"
+        urls_skeleton = "    url(r'^api/', include(%sResource().urls)),\n"
         url_data = ''
 
         with open(os.path.join(os.getcwd(), main_package_name) + '/urls.py', 'r') as w:
