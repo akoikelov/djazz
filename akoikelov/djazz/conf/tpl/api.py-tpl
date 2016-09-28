@@ -2,5 +2,5 @@
 class {{ model_name }}Resource(ModelResource):
     class Meta:
       queryset = {{ model_name }}.objects.all()
-      name = '{{ model_name }}'
+      name = '{{ model_name_underscore }}'
 {% endautoescape %}

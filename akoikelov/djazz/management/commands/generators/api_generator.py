@@ -10,7 +10,7 @@ class ApiGenerator(object):
 
     def generate(self):
         template = Template(self.api_skeleton)
-        context = Context(dict(model_name=self.model_name))
+        context = Context(dict(model_name=self.model_name, model_name_underscore=self.model_name.lower()))
 
         result = template.render(context)
         self.api_file_resource.write(result)

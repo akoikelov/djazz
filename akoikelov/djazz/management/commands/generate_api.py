@@ -17,6 +17,7 @@ class Command(BaseCommand):
         package = options['app_name']
         main_package_name = options['main_app_name']
         models_names = list(a.name for a in pyclbr.readmodule(package + '.models').values())
+        api_names = list(a.name for a in pyclbr.readmodule(package + '.api').values())
 
         package_dir = os.path.join(os.getcwd(), package)
         if not os.path.exists(package_dir):
@@ -28,9 +29,10 @@ class Command(BaseCommand):
         urls_skeleton = "\nurlpatterns.append(url(r'^api/', include(%sResource().urls)))"
 
         for m in models_names:
-            generator = ApiGenerator(m, api_file_resource, api_skeleton)
-            generator.generate()
-            urls += urls_skeleton % m
+            if m + 'Resource' not in api_names:
+                generator = ApiGenerator(m, api_file_resource, api_skeleton)
+                generator.generate()
+                urls += urls_skeleton % m
 
         urls_write_file_resource = open(os.path.join(os.getcwd(), main_package_name) + '/urls.py', 'a')
         urls_write_file_resource.write('\n' + urls)

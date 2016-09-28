@@ -1,4 +1,5 @@
 import os
+from StringIO import StringIO
 from django.core.management import call_command
 from django.test import TestCase
 from mock import mock
@@ -48,15 +49,21 @@ class TestGenerateModelCommand(TestCase):
 
     def test_generate_primitive_field(self):
         with mock.patch('__builtin__.raw_input', self.mock.primitive_field_mock):
-            result = call_command('generate_model', 'dummytestappforgeneratemodel', 'TestPrimitive')
+            out = StringIO()
+            result = call_command('generate_model', 'dummytestappforgeneratemodel', 'TestPrimitive', stdout=out)
             self.assertEqual(result, self.SUCCESS_CODE)
+            self.assertEqual(out.getvalue().replace('\n', ''), 'Model TestPrimitive successfully generated!')
 
     def test_generate_foreignkey_field(self):
         with mock.patch('__builtin__.raw_input', self.mock.foreignkey_field_mock):
-            result = call_command('generate_model', 'dummytestappforgeneratemodel', 'TestForeignKey')
+            out = StringIO()
+            result = call_command('generate_model', 'dummytestappforgeneratemodel', 'TestForeignKey', stdout=out)
             self.assertEqual(result, self.SUCCESS_CODE)
+            self.assertEqual(out.getvalue().replace('\n', ''), 'Model TestForeignKey successfully generated!')
 
     def test_generate_manytomany_field(self):
         with mock.patch('__builtin__.raw_input', self.mock.manytomany_field_mock):
-            result = call_command('generate_model', 'dummytestappforgeneratemodel', 'TestManyToMany')
+            out = StringIO()
+            result = call_command('generate_model', 'dummytestappforgeneratemodel', 'TestManyToMany', stdout=out)
             self.assertEqual(result, self.SUCCESS_CODE)
+            self.assertEqual(out.getvalue().replace('\n', ''), 'Model TestManyToMany successfully generated!')
