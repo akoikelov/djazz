@@ -58,7 +58,7 @@ class ModelGenerator(object):
 
         if guessed_field_type != '':
             while not typed_right_field_type:
-                field_type = raw_input('Field type?[%s] ' % guessed_field_type)
+                field_type = raw_input('Field type?[%s][leave blank to see available types] ' % guessed_field_type)
                 if field_type == '' or field_type in self.FIELD_TYPE_AUTOCOMPLETE_KEYWORDS:
                     field_type = self.fieldTypePairs[guessed_field_type]
                     typed_right_field_type = True
@@ -67,7 +67,7 @@ class ModelGenerator(object):
 
         else:
             while not typed_right_field_type:
-                field_type = raw_input('Field type? ')
+                field_type = raw_input('Field type?[leave blank to see available types] ')
                 if field_type not in self.FIELD_TYPE_AUTOCOMPLETE_KEYWORDS:
                     self.command_instance.stdout.write('\nWrong type! Choose one from list: ' + self.FIELD_TYPE_AUTOCOMPLETE_KEYWORDS.__str__())
                 else:
@@ -106,7 +106,7 @@ class ModelGenerator(object):
         self.command_instance.stdout.write('\n')
         self.fields.append(self.templates['field'] % (field_name, field_type, field_options))
 
-        if raw_input('Add more fields?[yes] ').lower() == 'no':
+        if raw_input('Add more fields?[yes/no] ').lower() == 'no':
             return True
 
         return False

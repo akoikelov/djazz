@@ -1,3 +1,5 @@
+from {{ models }} import {{ model_name }}
+
 {% autoescape off %}
 class {{ admin_name }}(admin.ModelAdmin):
     list_display = [{% for f in fields %}'{{ f }}', {% endfor %}]

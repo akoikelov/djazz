@@ -1,3 +1,6 @@
+
+from {{ models }} import {{ model_name }}
+
 {% autoescape off %}
 class {{ model_name }}Resource(ModelResource):
     class Meta:

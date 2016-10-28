@@ -33,3 +33,7 @@ class Command(BaseCommand):
 
         admin_file_resource.close()
         self.stdout.write(self.style.SUCCESS('Admin classes for models %s successfully generated!' % generated_admin_models))
+
+    def execute(self, *args, **options):
+        super(Command, self).execute(*args, **options)
+        return 0

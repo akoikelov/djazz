@@ -16,7 +16,7 @@ class RawInputMock(object):
             return '1000'
         elif question.__contains__('Unique?[False]') or question.__contains__('Null?[False]'):
             return ''
-        elif question.__contains__('Add more fields?[yes]'):
+        elif question.__contains__('Add more fields?[yes/no]'):
             return 'no'
         elif question.__contains__('Related model name?'):
             return ''

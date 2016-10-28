@@ -10,6 +10,7 @@ class AdminGenerator(object):
         self.admin_file_resource = admin_file_resource
         self.model_skeleton = admin_skeleton
         self.package = package + '.models.'
+        self.models = package + '.models'
 
     def generate(self):
         obj = locate(self.package + self.model_name)()
@@ -17,7 +18,7 @@ class AdminGenerator(object):
         fields.reverse()
 
         template = Template(self.model_skeleton)
-        context = Context(dict(model_name=self.model_name, admin_name=self.admin_name, fields=fields))
+        context = Context(dict(model_name=self.model_name, admin_name=self.admin_name, fields=fields, models=self.models))
 
         generated = template.render(context)
         self.admin_file_resource.write(generated)
