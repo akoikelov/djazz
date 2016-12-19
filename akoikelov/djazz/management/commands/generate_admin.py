@@ -7,7 +7,7 @@ from akoikelov.djazz.management.commands.generators.admin_generator import Admin
 
 class Command(BaseCommand):
 
-    help = 'Generates admin class for given model'
+    help = 'Generates admin classes for existing models inside app'
 
     def add_arguments(self, parser):
         parser.add_argument('app_name', type=str)
@@ -15,6 +15,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         package = options['app_name']
         models_names = list(a.name for a in pyclbr.readmodule(package + '.models').values())
+        admin_names = list(a.name for a in pyclbr.readmodule(package + '.admin').values())
+        generated_admin_models = []
 
         package_dir = os.path.join(os.getcwd(), package)
         admin_skeleton = open(os.path.join(akoikelov.djazz.__path__[0], 'conf', ) + '/tpl/admin.py-tpl').read()
@@ -24,8 +26,14 @@ class Command(BaseCommand):
             raise CommandError('Given package %s doesn\'t exist!' % package)
 
         for m in models_names:
-            generator = AdminGenerator(m, admin_file_resource, admin_skeleton, package)
-            generator.generate()
+            if m + 'Admin' not in admin_names:
+                generator = AdminGenerator(m, admin_file_resource, admin_skeleton, package)
+                generator.generate()
+                generated_admin_models.append(m)
 
         admin_file_resource.close()
-        self.stdout.write(self.style.SUCCESS('Admin classes for models %s successfully generated!' % models_names))
+        self.stdout.write(self.style.SUCCESS('Admin classes for models %s successfully generated!' % generated_admin_models))
+
+    def execute(self, *args, **options):
+        super(Command, self).execute(*args, **options)
+        return 0

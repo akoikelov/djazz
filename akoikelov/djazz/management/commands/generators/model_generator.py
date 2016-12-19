@@ -5,7 +5,8 @@ class ModelGenerator(object):
 
     FIELD_TYPE_AUTOCOMPLETE_KEYWORDS = [
         'char', 'text', 'date', 'datetime', 'decimal',
-        'email', 'float', 'int', 'url', 'bool', 'nullbool', 'fkey', 'mtm'
+        'email', 'float', 'int', 'url', 'bool', 'nullbool', 'fkey', 'mtm',
+        'file', 'image'
     ]
     FIELD_TYPES_WITH_MAX_LENGTH_OPTION = [
         'CharField', 'EmailField', 'URLField'
@@ -39,13 +40,12 @@ class ModelGenerator(object):
             char='CharField', text='TextField', date='DateField', datetime='DateTimeField',
             decimal='DecimalField', email='EmailField', float='FloatField', int='IntegerField',
             url='URLField', bool='BooleanField', nullbool='NullBooleanField', fkey='ForeignKey',
-            mtm='ManyToManyField'
+            mtm='ManyToManyField', file='FileField', image='ImageField'
         )
         self.fields = []
         self.command_instance = command_instance
 
     def ask(self):
-        has_relation = False  # we have to comment model field line with relation if related model doesn't exist yet
         typed_right_field_type = False
         field_options = ''
         field_name = raw_input('Field name? ')
@@ -58,7 +58,7 @@ class ModelGenerator(object):
 
         if guessed_field_type != '':
             while not typed_right_field_type:
-                field_type = raw_input('Field type?[%s] ' % guessed_field_type)
+                field_type = raw_input('Field type?[%s][leave blank to see available types] ' % guessed_field_type)
                 if field_type == '' or field_type in self.FIELD_TYPE_AUTOCOMPLETE_KEYWORDS:
                     field_type = self.fieldTypePairs[guessed_field_type]
                     typed_right_field_type = True
@@ -67,7 +67,7 @@ class ModelGenerator(object):
 
         else:
             while not typed_right_field_type:
-                field_type = raw_input('Field type? ')
+                field_type = raw_input('Field type?[leave blank to see available types] ')
                 if field_type not in self.FIELD_TYPE_AUTOCOMPLETE_KEYWORDS:
                     self.command_instance.stdout.write('\nWrong type! Choose one from list: ' + self.FIELD_TYPE_AUTOCOMPLETE_KEYWORDS.__str__())
                 else:
@@ -89,7 +89,6 @@ class ModelGenerator(object):
 
             on_delete = raw_input('On delete?[models.CASCADE] ')
             field_options += ', ' + self.templates['on_del'] % 'models.CASCADE' if on_delete == '' else ', ' + self.templates['on_del'] % on_delete
-            has_relation = True
 
         if field_type == 'ManyToManyField':
             related_model = raw_input('ManyToMany model name? ')
@@ -99,20 +98,15 @@ class ModelGenerator(object):
             related_model = self.templates['to'] % related_model
 
             field_options += ', %s, %s, %s' % (related_model, through_model, through_fields)
-            has_relation = True
 
         if field_type not in self.FIELD_TYPES_WITHOUT_NULL_OPTION:
             nullable = raw_input('Null?[False] ')
             field_options += ', ' + self.templates['null'] % 'False' if nullable == '' else ', ' + self.templates['null'] % nullable
 
         self.command_instance.stdout.write('\n')
+        self.fields.append(self.templates['field'] % (field_name, field_type, field_options))
 
-        if has_relation:
-            self.fields.append('#' + self.templates['field'] % (field_name, field_type, field_options))
-        else:
-            self.fields.append(self.templates['field'] % (field_name, field_type, field_options))
-
-        if raw_input('Add more fields?[yes] ').lower() == 'no':
+        if raw_input('Add more fields?[yes/no] ').lower() == 'no':
             return True
 
         return False

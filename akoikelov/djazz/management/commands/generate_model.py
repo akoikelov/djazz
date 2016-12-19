@@ -26,6 +26,8 @@ class Command(BaseCommand):
         generator = ModelGenerator(model_name, model_skeleton, models_file_resource, self)
         finished = False
 
+        self.stdout.write(self.style.SUCCESS('Welcome to model generator!\n'))
+
         while not finished:
             finished = generator.ask()
             self.stdout.write('\n')
