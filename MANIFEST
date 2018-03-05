@@ -15,4 +15,6 @@ akoikelov/djazz/management/commands/generators/admin_generator.py
 akoikelov/djazz/management/commands/generators/api_generator.py
 akoikelov/djazz/management/commands/generators/model_generator.py
 akoikelov/djazz/tests/__init__.py
+akoikelov/djazz/tests/test_generate_admin_command.py
+akoikelov/djazz/tests/test_generate_api_command.py
 akoikelov/djazz/tests/test_generate_model_command.py
