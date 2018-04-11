@@ -2,7 +2,7 @@
 Djazz is helper library for Django framework
 
 #### How to install
-1. via pip: `pip install akoikelov.djazz`
+1. via pip: `pip install git+https://github.com/akoikelov/djazz`
 or
 2. download repository: https://github.com/akoikelov/djazz and run script `./install.sh`
 
