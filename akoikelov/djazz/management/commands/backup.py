@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.core.management import BaseCommand, CommandError
 
-from akoikelov.djazz.management.commands.backup.cloud import DropboxHelper
-from akoikelov.djazz.management.commands.backup.helper import *
+from akoikelov.djazz.management.commands.backup_helper.cloud import DropboxHelper
+from akoikelov.djazz.management.commands.backup_helper.helper import *
 
 
 class Command(BaseCommand):
@@ -39,4 +39,5 @@ class Command(BaseCommand):
         if not hasattr(settings, 'DATABASES'):
             raise CommandError('Please provide database settings')
 
-        backup_helper = self.BACKUP_HELPERS[settings.DATABASES['default']['ENGINE']]()
+        db_settings = settings.DATABASES['default']
+        backup_helper = self.BACKUP_HELPERS[db_settings['ENGINE']](db_settings)

@@ -1,7 +1,9 @@
 
 
 class AbstractBackupHelper(object):
-    pass
+
+    def __init__(self, db_settings):
+        self.db_settings = db_settings
 
 
 class MySQLBackupHelper(AbstractBackupHelper):
