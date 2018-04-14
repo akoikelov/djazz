@@ -48,7 +48,7 @@ setup(
     packages=packages,
     package_data=package_data,
     include_package_data=True,
-    requires=['django', 'setuptools', 'mock'],
+    requires=['django', 'setuptools', 'mock', 'dropbox'],
     url='https://github.com/akoikelov/djazz',
     license='',
     author='akoikelov',
