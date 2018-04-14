@@ -1,5 +1,8 @@
+from datetime import datetime
+
 from django.conf import settings
-from django.core.management import BaseCommand, CommandError
+from django.core.management import BaseCommand
+from django.utils.timezone import activate
 
 from akoikelov.djazz.management.commands.backup_helper.cloud import DropboxHelper
 from akoikelov.djazz.management.commands.backup_helper.helper import *
@@ -8,11 +11,6 @@ from akoikelov.djazz.management.commands.backup_helper.helper import *
 class Command(BaseCommand):
 
     help = 'Save/load backup from/to cloud storage'
-
-    BACKUP_HELPERS = {
-        'django.db.backends.sqlite3': SQLiteBackupHelper,
-        'django.db.backends.mysql': MySQLBackupHelper,
-    }
 
     def add_arguments(self, parser):
         parser.add_argument('--include-media', action='store_true', dest='include-media', help='Include media folder '
@@ -39,5 +37,19 @@ class Command(BaseCommand):
         if not hasattr(settings, 'DATABASES'):
             raise CommandError('Please provide database settings')
 
-        db_settings = settings.DATABASES['default']
-        backup_helper = self.BACKUP_HELPERS[db_settings['ENGINE']](db_settings)
+        include_media = options['include-media']
+
+        if include_media and not hasattr(settings, 'MEDIA_ROOT'):
+            raise CommandError('MEDIA_ROOT is not provided')
+
+        if action == 'save':
+            backup_helper = BackupHelper(media_root=settings.MEDIA_ROOT if include_media else None)
+
+            activate(settings.TIME_ZONE)
+
+            result_archive_name = 'backup-%s' % datetime.now().strftime('%Y-%m-%d_%H:%M')
+            compressed_file_path = backup_helper.backup_and_compress(result_archive_name)
+
+            dropbox.upload(compressed_file_path)
+        else:
+            raise CommandError('Action --load not implemented yet.')

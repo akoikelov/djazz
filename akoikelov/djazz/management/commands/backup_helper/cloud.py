@@ -5,3 +5,6 @@ class DropboxHelper(object):
 
     def __init__(self, access_token):
         self.dropbox = Dropbox(oauth2_access_token=access_token)
+
+    def upload(self, file_path):
+        pass

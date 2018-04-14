@@ -1,0 +1,8 @@
+DROPBOX_ACCESS_TOKEN_VALUE = ''
+
+DATABASES_SETTING = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'test.sqlite3',
+    }
+}

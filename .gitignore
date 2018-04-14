@@ -66,3 +66,6 @@ target/
 
 /TODO
 params.py
+/media
+/*.zip
+/*.sqlite3

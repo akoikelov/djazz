@@ -10,18 +10,19 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
-from params import DROPBOX_ACCESS_TOKEN_VALUE
+from params import DROPBOX_ACCESS_TOKEN_VALUE, DATABASES_SETTING
 
 INSTALLED_APPS = (
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
     'akoikelov.djazz',
 )
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'test.sqlite3',
-    }
-}
+DATABASES = DATABASES_SETTING
 
 SECRET_KEY = "secret_key_for_testing"
 DROPBOX_ACCESS_TOKEN = DROPBOX_ACCESS_TOKEN_VALUE
+MEDIA_ROOT = 'media'
