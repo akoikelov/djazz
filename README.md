@@ -23,7 +23,7 @@ There are several commands inside:
 #### Backup
 
 For backup of database and media files, there is a command:
-- `python manage.py backup \[--save\] \[--load\] \[--include-media\]`
+- `python manage.py backup [--save] [--load] [--include-media]`
 
 * --save: option for saving backup
 * --load: option for loading latest backup
