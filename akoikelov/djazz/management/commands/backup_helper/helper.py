@@ -19,7 +19,7 @@ class BackupHelper(object):
             'output': file
         })
 
-        self._compress_all(db_file={
+        return self._compress_all(db_file={
             'file': file,
             'delete': True
         }, result_archive_name=result_archive_name)
@@ -54,4 +54,6 @@ class BackupHelper(object):
 
         make_archive(result_archive_name, 'zip', tmp_dir)
         rmtree(tmp_dir)
+
+        return '%s.zip' % result_archive_name
 

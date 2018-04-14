@@ -48,8 +48,8 @@ class Command(BaseCommand):
             activate(settings.TIME_ZONE)
 
             result_archive_name = 'backup-%s' % datetime.now().strftime('%Y-%m-%d_%H:%M')
-            compressed_file_path = backup_helper.backup_and_compress(result_archive_name)
+            compressed_file = backup_helper.backup_and_compress(result_archive_name)
 
-            dropbox.upload(compressed_file_path)
+            dropbox.upload(compressed_file)
         else:
             raise CommandError('Action --load not implemented yet.')
