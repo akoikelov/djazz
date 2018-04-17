@@ -18,12 +18,12 @@ or
 There are several commands inside:
 - `python manage.py generate_model [app_name] [model_name]`
 - `python manage.py generate_admin [app_name]`
-- `python manage.py generate_api [app_name] [main_app_name]` (requires tastypie library)
 
 #### Backup
 
 For backup of database and media files, there is a command:
-- `python manage.py backup [--save] [--load] [--include-media]`
+
+`python manage.py backup [--save] [--load] [--include-media]`
 
 * --save: option for saving backup
 * --load: option for loading latest backup
