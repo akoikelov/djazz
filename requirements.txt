@@ -2,3 +2,4 @@ django
 setuptools
 mock
 dropbox
+unidecode

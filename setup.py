@@ -48,7 +48,7 @@ setup(
     packages=packages,
     package_data=package_data,
     include_package_data=True,
-    install_requires=['django', 'setuptools', 'mock', 'dropbox'],
+    install_requires=['django', 'setuptools', 'mock', 'dropbox', 'unidecode'],
     url='https://github.com/akoikelov/djazz',
     license='',
     author='akoikelov',

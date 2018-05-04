@@ -1,4 +1,6 @@
 from django.db.models import Model, DateTimeField
+from django.utils.text import slugify
+from unidecode import unidecode
 
 
 class AbstractModel(Model):
@@ -14,3 +16,15 @@ class AbstractModel(Model):
 
     def __str__(self):
         return self.__unicode__()
+
+
+class ModelWithSlugMixin(AbstractModel):
+
+    slugifying_field_name = 'name'
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(unidecode(getattr(self, self.slugifying_field_name)))
+        super(ModelWithSlugMixin, self).save(*args, **kwargs)
