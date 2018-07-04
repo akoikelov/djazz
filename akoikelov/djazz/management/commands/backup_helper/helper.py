@@ -16,7 +16,8 @@ class BackupHelper(object):
     def backup_and_compress(self, result_archive_name):
         file = 'db_dump_%s.json' % random()
         call_command('dumpdata', **{
-            'output': file
+            'output': file,
+            'exclude': ['auth.permission', 'contenttypes']
         })
 
         return self._compress_all(db_file={

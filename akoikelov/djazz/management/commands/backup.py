@@ -51,5 +51,6 @@ class Command(BaseCommand):
             compressed_file = backup_helper.backup_and_compress(result_archive_name)
 
             dropbox.upload(compressed_file)
+            os.remove(compressed_file)
         else:
             raise CommandError('Action --load not implemented yet.')
