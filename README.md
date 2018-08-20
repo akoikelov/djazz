@@ -30,5 +30,5 @@ For backup of database and media files, there is a command:
 * --include-media: also backup media files
 * --replace: Delete old backups and replace them with a new backup
 
-For backup, we use Dropbox.
+We store backups at Dropbox.
 Add `DROPBOX_ACCESS_TOKEN` param to settings.py, containing dropbox access token
