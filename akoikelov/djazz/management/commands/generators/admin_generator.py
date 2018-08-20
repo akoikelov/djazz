@@ -14,7 +14,7 @@ class AdminGenerator(object):
 
     def generate(self):
         obj = locate(self.package + self.model_name)()
-        fields = list(a for a in obj.__dict__ if not a.startswith('_'))
+        fields = list(f.name for f in obj._meta.fields)
         fields.reverse()
 
         template = Template(self.model_skeleton)
