@@ -23,11 +23,12 @@ There are several commands inside:
 
 For backup of database and media files, there is a command:
 
-`python manage.py backup [--save] [--load] [--include-media]`
+`python manage.py backup [--save] [--load] [--include-media] [--replace]`
 
 * --save: option for saving backup
 * --load: option for loading latest backup
 * --include-media: also backup media files
+* --replace: Delete old backups and replace them with a new backup
 
 For backup, we use Dropbox.
 Add `DROPBOX_ACCESS_TOKEN` param to settings.py, containing dropbox access token

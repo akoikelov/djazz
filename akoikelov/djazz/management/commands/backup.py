@@ -17,7 +17,8 @@ class Command(BaseCommand):
                                                                                                'to backup')
         parser.add_argument('--save', action='store_true', dest='save', help='Save backup')
         parser.add_argument('--load', action='store_true', dest='load', help='Load backup')
-        parser.add_argument('--replace', action='store_true', dest='replace', help='Delete old backups and replace them with a new')
+        parser.add_argument('--replace', action='store_true', dest='replace', help='Delete old backups and replace '
+                                                                                   'them with a new')
 
     def handle(self, *args, **options):
         if not hasattr(settings, 'DROPBOX_ACCESS_TOKEN'):
