@@ -13,13 +13,19 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 from params import DROPBOX_ACCESS_TOKEN_VALUE, DATABASES_SETTING
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'akoikelov.djazz',
+    'test_app'
 )
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    },
+]
 
 DATABASES = DATABASES_SETTING
 

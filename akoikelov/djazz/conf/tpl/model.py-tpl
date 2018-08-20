@@ -1,4 +1,3 @@
-from akoikelov.djazz.models import AbstractModel
 
 {% autoescape off %}
 class {{ model_name }}(AbstractModel):
