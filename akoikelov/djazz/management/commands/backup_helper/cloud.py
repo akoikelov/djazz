@@ -16,3 +16,7 @@ class DropboxHelper(object):
             except exceptions.BadInputError:
                 os.remove(file_path)
                 raise CommandError('Unable to upload file to Dropbox. Maybe access token is invalid.')
+
+    def delete_all_files(self):
+        for i in self.dropbox.files_list_folder('').entries:
+            self.dropbox.files_delete(i.path_lower)

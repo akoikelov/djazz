@@ -16,13 +16,15 @@ class Command(BaseCommand):
         parser.add_argument('--include-media', action='store_true', dest='include-media', help='Include media folder '
                                                                                                'to backup')
         parser.add_argument('--save', action='store_true', dest='save', help='Save backup')
-        parser.add_argument('--load', action='store_true', dest='load', help='load backup')
+        parser.add_argument('--load', action='store_true', dest='load', help='Load backup')
+        parser.add_argument('--replace', action='store_true', dest='replace', help='Delete old backups and replace them with a new')
 
     def handle(self, *args, **options):
         if not hasattr(settings, 'DROPBOX_ACCESS_TOKEN'):
             raise CommandError('DROPBOX_ACCESS_TOKEN is not set in settings')
 
         action = None
+        replace = options['replace']
 
         if options['save']:
             action = 'save'
@@ -49,6 +51,9 @@ class Command(BaseCommand):
 
             result_archive_name = 'backup-%s' % datetime.now().strftime('%Y-%m-%d_%H:%M')
             compressed_file = backup_helper.backup_and_compress(result_archive_name)
+
+            if replace:
+                dropbox.delete_all_files()
 
             dropbox.upload(compressed_file)
             os.remove(compressed_file)
