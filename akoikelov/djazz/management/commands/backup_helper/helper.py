@@ -1,10 +1,14 @@
+import shutil
+import subprocess
 from distutils.dir_util import copy_tree
 from random import random
 from shutil import make_archive, copyfile, rmtree
 
+from django.core.management import CommandError
+
 import os
 
-from django.core.management import CommandError, call_command
+import settings
 
 
 class BackupHelper(object):
@@ -14,23 +18,20 @@ class BackupHelper(object):
         self.media_archive_name = media_archive_name
 
     def backup_and_compress(self, result_archive_name):
-        file = 'db_dump_%s.json' % random()
-        call_command('dumpdata', **{
-            'output': file,
-            'exclude': ['auth.permission', 'contenttypes']
-        })
+        dumper = self.Dumper()
+        files = dumper.create_dumps(db_config=settings.DATABASES)
 
-        return self._compress_all(db_file={
-            'file': file,
+        return self._compress_all(db_files=[{
+            'file': f,
             'delete': True
-        }, result_archive_name=result_archive_name)
+        } for f in files], result_archive_name=result_archive_name)
 
-    def _compress_all(self, db_file, result_archive_name):
+    def _compress_all(self, db_files, result_archive_name):
         if self.media_root is not None:
             if not os.path.exists(self.media_root):
                 raise CommandError('MEDIA_ROOT path directory does not exist.')
 
-        files = [db_file]
+        files = db_files
 
         if self.media_root:
             files.append({
@@ -58,3 +59,42 @@ class BackupHelper(object):
 
         return '%s.zip' % result_archive_name
 
+    class Dumper(object):
+
+        def create_dumps(self, db_config):
+            filename_tpl = '{id}_dump_{db}'
+            files = []
+
+            for k in db_config:
+                config = db_config[k]
+                filename = filename_tpl.format(id=random(), db=k)
+
+                if 'sqlite3' in config['ENGINE']:
+                    self._dump_sqlite(config, filename)
+                elif 'mysql' in config['ENGINE']:
+                    self._dump_mysql(config, filename)
+                elif 'postgresql' in config['ENGINE']:
+                    self._dump_pg(config, filename)
+
+                files.append(filename)
+
+            return files
+
+        def _dump_sqlite(self, config, filename):
+            shutil.copy(config['NAME'], filename)
+
+        def _dump_mysql(self, config, filename):
+            command = "mysqldump --user='%s' --password='%s' -h %s -e --opt -c %s > %s" % (
+                config['USER'], config['PASSWORD'], config['HOST'], config['NAME'], filename)
+
+            p = subprocess.Popen(command, shell=True)
+            p.wait()
+
+        def _dump_pg(self, config, filename):
+            command = 'export PGPASSWORD="%s" && pg_dump -h %s -U %s %s > %s' % (
+                config['PASSWORD'],
+                config['HOST'], config['USER'], config['NAME'], filename
+            )
+
+            p = subprocess.Popen(command, shell=True)
+            p.wait()
