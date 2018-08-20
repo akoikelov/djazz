@@ -53,10 +53,15 @@ class Command(BaseCommand):
             result_archive_name = 'backup-%s' % datetime.now().strftime('%Y-%m-%d_%H:%M')
             compressed_file = backup_helper.backup_and_compress(result_archive_name)
 
-            if replace:
-                dropbox.delete_all_files()
+            try:
+                if replace:
+                    dropbox.delete_all_files()
 
-            dropbox.upload(compressed_file)
+                dropbox.upload(compressed_file)
+            except:
+                pass
+
             os.remove(compressed_file)
+
         else:
             raise CommandError('Action --load not implemented yet.')
