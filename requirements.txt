@@ -3,5 +3,4 @@ setuptools
 mock
 dropbox
 unidecode
-pexpect
 psycopg2
