@@ -82,7 +82,8 @@ class ModelGenerator(object):
         field_options += self.templates['verbose_name'] % field_name
 
         if field_type in self.FIELD_TYPES_WITH_MAX_LENGTH_OPTION:
-            field_options += ', ' + self.templates['max_length'] % user_input('Max length? ')
+            max_length = user_input('Max length?[255]')
+            field_options += ', ' + self.templates['max_length'] % (255 if max_length == '' else max_length)
 
         if field_type in self.FIELD_TYPES_WITH_UNIQUE_OPTION:
             unique = user_input('Unique?[False] ')
