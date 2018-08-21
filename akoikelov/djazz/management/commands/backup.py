@@ -14,11 +14,11 @@ class Command(BaseCommand):
     help = 'Save/load backup from/to cloud storage'
 
     def add_arguments(self, parser):
-        parser.add_argument('--include-media', action='store_true', dest='include-media', help='Include media folder '
+        parser.add_argument('-m', action='store_true', dest='include-media', help='Include media folder '
                                                                                                'to backup')
-        parser.add_argument('--save', action='store_true', dest='save', help='Save backup')
-        parser.add_argument('--load', action='store_true', dest='load', help='Load backup')
-        parser.add_argument('--replace', action='store_true', dest='replace', help='Delete old backups and replace '
+        parser.add_argument('-s', action='store_true', dest='save', help='Save backup')
+        parser.add_argument('-l', action='store_true', dest='load', help='Load backup')
+        parser.add_argument('-r', action='store_true', dest='replace', help='Delete old backups and replace '
                                                                                    'them with a new')
 
     def handle(self, *args, **options):

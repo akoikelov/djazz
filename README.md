@@ -16,20 +16,20 @@ or
 ]`
 
 There are several commands inside:
-- `python manage.py generate_model [app_name] [model_name]`
-- `python manage.py generate_admin [app_name]`
+- `python manage.py gen_model [app_name] [model_name]`
+- `python manage.py gen_admin [app_name]`
 
 #### Backup
 
 For backup of database and media files, there is a command:
 
-- `python manage.py backup [--save] [--include-media] [--replace]`
-- `python manage.py backup [--load]`
+- `python manage.py backup [-s] [-m] [-r]`
+- `python manage.py backup [-l]`
 
-* --save: option for saving backup
-* --load: option for loading latest backup
-* --include-media: also backup media files
-* --replace: Delete old backups and replace them with a new backup
+* -s: option for saving backup
+* -l: option for loading latest backup
+* -m: also backup media files
+* -r: Delete old backups and replace them with a new backup
 
 We store backups at Dropbox.
 Add `DROPBOX_ACCESS_TOKEN` param to settings.py, containing dropbox access token
