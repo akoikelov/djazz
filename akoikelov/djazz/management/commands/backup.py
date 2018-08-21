@@ -69,6 +69,10 @@ class Command(BaseCommand):
     def _load(self, backup_helper, dropbox):
         working_dir = os.getcwd()
         path_to_file, hash = dropbox.download_last_backup(working_dir)
+        extract_dir_path = '%s/%s' % (working_dir, hash)
 
         with zipfile.ZipFile(path_to_file, 'r') as zip_file:
-            zip_file.extractall('%s/%s' % (working_dir, hash))
+            zip_file.extractall(extract_dir_path)
+
+        os.remove(path_to_file)
+        backup_helper.load_backup(extract_dir_path)

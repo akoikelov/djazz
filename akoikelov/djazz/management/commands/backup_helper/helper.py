@@ -59,6 +59,9 @@ class BackupHelper(object):
 
         return '%s.zip' % result_archive_name
 
+    def load_backup(self, backup_folder_path):
+        pass
+
     class Dumper(object):
 
         def create_dumps(self, db_config):
