@@ -1,3 +1,4 @@
+import zipfile
 from datetime import datetime
 
 from django.conf import settings
@@ -66,4 +67,8 @@ class Command(BaseCommand):
         os.remove(compressed_file)
 
     def _load(self, backup_helper, dropbox):
-        raise CommandError('Action --load not implemented yet.')
+        working_dir = os.getcwd()
+        path_to_file, hash = dropbox.download_last_backup(working_dir)
+
+        with zipfile.ZipFile(path_to_file, 'r') as zip_file:
+            zip_file.extractall('%s/%s' % (working_dir, hash))
