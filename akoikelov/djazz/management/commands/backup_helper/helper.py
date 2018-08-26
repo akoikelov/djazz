@@ -4,11 +4,10 @@ from distutils.dir_util import copy_tree
 from random import random
 from shutil import make_archive, copyfile, rmtree
 
+from django.conf import settings
 from django.core.management import CommandError
 
 import os
-
-import settings
 
 
 class BackupHelper(object):
