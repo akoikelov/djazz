@@ -98,16 +98,16 @@ class ModelGenerator(object):
 
         if field_type == 'ManyToManyField':
             related_model = user_input('ManyToMany model name? ')
-            through_model = self.templates['through'] % user_input('Through model?: ')
-            through_fields = self.templates['through_fields'] % (self.model_name.lower(), related_model.lower())
-
             related_model = self.templates['to'] % related_model
 
-            field_options += ', %s, %s, %s' % (related_model, through_model, through_fields)
+            field_options += ', %s,' % related_model
 
         if field_type not in self.FIELD_TYPES_WITHOUT_NULL_OPTION:
             nullable = user_input('Null?[False] ')
             field_options += ', ' + self.templates['null'] % 'False' if nullable == '' else ', ' + self.templates['null'] % nullable
+
+            if nullable == 'True':
+                field_options += ', blank=True'
 
         self.command_instance.stdout.write('\n')
         self.fields.append(self.templates['field'] % (field_name, field_type, field_options))
