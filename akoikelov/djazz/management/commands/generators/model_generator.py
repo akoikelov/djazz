@@ -112,10 +112,7 @@ class ModelGenerator(object):
         self.command_instance.stdout.write('\n')
         self.fields.append(self.templates['field'] % (field_name, field_type, field_options))
 
-        if user_input('Add more fields?[yes/no] ').lower() == 'no':
-            return True
-
-        return False
+        return user_input('Add more fields?[yes/no] ').lower() == 'no'
 
     def generate(self):
         template = Template(self.model_skeleton)
