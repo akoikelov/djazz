@@ -69,13 +69,13 @@ class ModelGenerator(object):
                     field_type = self.fieldTypePairs[guessed_field_type]
                     typed_right_field_type = True
                 else:
-                    self.command_instance.stdout.write('\nWrong type! Choose one from list: ' + self.FIELD_TYPE_AUTOCOMPLETE_KEYWORDS.__str__())
-
+                    self.console_write('\nWrong type! Choose one from list: ' + self.FIELD_TYPE_AUTOCOMPLETE_KEYWORDS.__str__())
         else:
             while not typed_right_field_type:
                 field_type = user_input('Field type?[leave blank to see available types] ')
+
                 if field_type not in self.FIELD_TYPE_AUTOCOMPLETE_KEYWORDS:
-                    self.command_instance.stdout.write('\nWrong type! Choose one from list: ' + self.FIELD_TYPE_AUTOCOMPLETE_KEYWORDS.__str__())
+                    self.console_write('\nWrong type! Choose one from list: ' + self.FIELD_TYPE_AUTOCOMPLETE_KEYWORDS.__str__())
                 else:
                     field_type = self.fieldTypePairs[field_type]
                     typed_right_field_type = True
@@ -88,27 +88,25 @@ class ModelGenerator(object):
 
         if field_type in self.FIELD_TYPES_WITH_UNIQUE_OPTION:
             unique = user_input('Unique?[False] ')
-            field_options += ', ' + self.templates['unique'] % 'False' if unique == '' else ', ' + self.templates['unique'] % unique
+            field_options += ', ' + self.templates['unique'] % ('False' if unique == '' else unique)
 
         if field_type == 'ForeignKey':
             related_model = user_input('Related model name?[%s] ' % field_name.capitalize())
-            field_options += ', ' + self.templates['to'] % field_name.capitalize() if related_model == '' else ', ' + self.templates['to'] % related_model
+            field_options += ', ' + self.templates['to'] % (field_name.capitalize() if related_model == '' else related_model)
 
             on_delete = user_input('On delete?[models.CASCADE] ')
-            field_options += ', ' + self.templates['on_del'] % 'models.CASCADE' if on_delete == '' else ', ' + self.templates['on_del'] % on_delete
+            field_options += ', ' + self.templates['on_del'] % ('models.CASCADE' if on_delete == '' else on_delete)
 
             related_name = user_input('Related name? ')
             field_options += ', ' + self.templates['related_name'] % related_name if related_name != '' else ''
 
         if field_type == 'ManyToManyField':
             related_model = user_input('ManyToMany model name? ')
-            related_model = self.templates['to'] % related_model
-
-            field_options += ', %s,' % related_model
+            field_options += ', %s,' % self.templates['to'] % related_model
 
         if field_type not in self.FIELD_TYPES_WITHOUT_NULL_OPTION:
             nullable = user_input('Null?[False] ')
-            field_options += ', ' + self.templates['null'] % 'False' if nullable == '' else ', ' + self.templates['null'] % nullable
+            field_options += ', ' + self.templates['null'] % ('False' if nullable == '' else nullable)
 
             if nullable == 'True':
                 field_options += ', blank=True'
@@ -134,3 +132,6 @@ class ModelGenerator(object):
             return 'datetime'
         else:
             return ''
+
+    def console_write(self, text):
+        self.command_instance.stdout.write(text)
