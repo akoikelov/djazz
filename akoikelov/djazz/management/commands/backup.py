@@ -64,7 +64,8 @@ class Command(BaseCommand):
         except:
             pass
 
-        os.remove(compressed_file)
+        if os.path.exists(compressed_file):
+            os.remove(compressed_file)
 
     def _load(self, backup_helper, dropbox):
         working_dir = os.getcwd()

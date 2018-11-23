@@ -69,3 +69,4 @@ params.py
 /media
 /*.zip
 /*.sqlite3
+/backup*
