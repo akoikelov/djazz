@@ -58,7 +58,9 @@ class BackupHelper(object):
         make_archive(result_archive_name, 'zip', tmp_dir_path)
         rmtree(tmp_dir)
 
-        return os.path.join(os.getcwd(), '%s.zip' % result_archive_name)
+        filename = '%s.zip' % result_archive_name
+
+        return filename, os.path.join(os.getcwd(), filename)
 
     def load_backup(self, backup_folder_path):
         pass

@@ -54,18 +54,18 @@ class Command(BaseCommand):
     def _save(self, backup_helper, dropbox, replace):
         activate(settings.TIME_ZONE)
         result_archive_name = 'backup-%s' % datetime.now().strftime('%Y-%m-%d_%H:%M')
-        compressed_file = backup_helper.backup_and_compress(result_archive_name)
+        filename, compressed_file_path = backup_helper.backup_and_compress(result_archive_name)
 
         try:
             if replace:
                 dropbox.delete_all_files()
 
-            dropbox.upload(compressed_file)
-        except Exception as e:
-            raise CommandError('Uploading backup to dropbox has been failed')
-        finally:
-            if os.path.exists(compressed_file):
-                os.remove(compressed_file)
+            dropbox.upload(filename, compressed_file_path)
+        except:
+            pass
+
+        if os.path.exists(compressed_file_path):
+            os.remove(compressed_file_path)
 
     def _load(self, backup_helper, dropbox):
         working_dir = os.getcwd()
