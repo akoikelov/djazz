@@ -41,11 +41,17 @@ class BackupHelper(object):
         tmp_dir = 'backup_tmp_%s' % random()
         os.mkdir(tmp_dir)
 
+        curr_dir = os.getcwd()
+
         for f in files:
             if 'file' in f:
                 copyfile(f['file'], '%s/%s' % (tmp_dir, f['file']))
             else:
-                copy_tree(f['folder'], '%s/%s' % (tmp_dir, f['folder']))
+                os.chdir(os.path.join(f['folder'], '../'))
+                media_folder_name = os.path.basename(os.path.normpath(f['folder']))
+
+                copy_tree(f['folder'], '%s/%s' % (tmp_dir, media_folder_name))
+                os.chdir(curr_dir)
 
             if f['delete']:
                 if 'file' in f:
