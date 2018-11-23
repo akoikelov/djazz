@@ -39,7 +39,8 @@ class ModelGenerator(object):
             on_del='on_delete=%s',
             to='to=%s',
             through='through=\'%s\'',
-            through_fields='through_fields=(\'%s\', \'%s\')'
+            through_fields='through_fields=(\'%s\', \'%s\')',
+            related_name='related_name=\'%s\''
         )
         self.fieldTypePairs = dict(
             char='CharField', text='TextField', date='DateField', datetime='DateTimeField',
@@ -95,6 +96,9 @@ class ModelGenerator(object):
 
             on_delete = user_input('On delete?[models.CASCADE] ')
             field_options += ', ' + self.templates['on_del'] % 'models.CASCADE' if on_delete == '' else ', ' + self.templates['on_del'] % on_delete
+
+            related_name = user_input('Related name? ')
+            field_options += ', ' + self.templates['related_name'] % related_name if related_name != '' else ''
 
         if field_type == 'ManyToManyField':
             related_model = user_input('ManyToMany model name? ')
