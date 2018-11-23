@@ -61,11 +61,11 @@ class Command(BaseCommand):
                 dropbox.delete_all_files()
 
             dropbox.upload(compressed_file)
-        except:
-            pass
-
-        if os.path.exists(compressed_file):
-            os.remove(compressed_file)
+        except Exception as e:
+            raise CommandError('Uploading backup to dropbox has been failed')
+        finally:
+            if os.path.exists(compressed_file):
+                os.remove(compressed_file)
 
     def _load(self, backup_helper, dropbox):
         working_dir = os.getcwd()
