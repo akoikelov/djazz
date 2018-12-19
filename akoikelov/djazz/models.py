@@ -8,8 +8,8 @@ class AbstractModel(Model):
     class Meta:
         abstract = True
 
-    created_at = DateTimeField(verbose_name='Создано', auto_now_add=True, null=True)
-    updated_at = DateTimeField(verbose_name='Обновлено', auto_now=True, null=True)
+    created_at = DateTimeField(verbose_name='created_at', auto_now_add=True, null=True)
+    updated_at = DateTimeField(verbose_name='updated_at', auto_now=True, null=True)
 
     def __unicode__(self):
         pass
