@@ -40,29 +40,30 @@ class Command(BaseCommand):
             raise CommandError('Please provide database settings')
 
         include_media = options['include-media']
-        dropbox = DropboxHelper(access_token=settings.DROPBOX_ACCESS_TOKEN)
-        backup_helper = BackupHelper(media_root=settings.MEDIA_ROOT if include_media else None)
 
         if include_media and not hasattr(settings, 'MEDIA_ROOT'):
             raise CommandError('MEDIA_ROOT is not provided')
 
-        if action == 'save':
-            self._save(backup_helper, dropbox, replace)
-        else:
-            self._load(backup_helper, dropbox)
+        try:
+            dropbox = DropboxHelper(access_token=settings.DROPBOX_ACCESS_TOKEN)
+            backup_helper = BackupHelper(media_root=settings.MEDIA_ROOT if include_media else None)
+
+            if action == 'save':
+                self._save(backup_helper, dropbox, replace)
+            else:
+                self._load(backup_helper, dropbox)
+        except Exception as e:
+            self.stdout.write(self.style.ERROR(e))
 
     def _save(self, backup_helper, dropbox, replace):
         activate(settings.TIME_ZONE)
         result_archive_name = 'backup-%s' % datetime.now().strftime('%Y-%m-%d_%H:%M')
         filename, compressed_file_path = backup_helper.backup_and_compress(result_archive_name)
 
-        try:
-            if replace:
-                dropbox.delete_all_files()
+        if replace:
+            dropbox.delete_all_files()
 
-            dropbox.upload(filename, compressed_file_path)
-        except:
-            pass
+        dropbox.upload(filename, compressed_file_path)
 
         if os.path.exists(compressed_file_path):
             os.remove(compressed_file_path)
