@@ -2,12 +2,12 @@
 {% autoescape off %}
 class {{ model_name }}(AbstractModel):
     class Meta:
-        verbose_name_plural = ''
-        verbose_name = ''
+        verbose_name_plural = '{{ model_name }}'
+        verbose_name = '{{ model_name }}'
 
     {% for field in fields %}{{ field }}
     {% endfor %}
 
     def __unicode__(self):
-        return ''
+        return str(self.pk)
 {% endautoescape %}
