@@ -12,6 +12,8 @@ class Command(BaseCommand):
         parser.add_argument('app_name', type=str)
         parser.add_argument('model_name', type=str)
 
+        parser.add_argument('-g', action='store_true', dest='include_gallery', help='Generate gallery model for given model?')
+
     def handle(self, *args, **options):
         package = options['app_name']
         model_name = options['model_name']
@@ -24,7 +26,7 @@ class Command(BaseCommand):
         model_skeleton = open(os.path.join(akoikelov.djazz.__path__[0], 'conf', ) + '/tpl/model.py-tpl').read()
         models_file_res = open(package_dir + '/models.py', 'a')
         models_file_res_read = open(package_dir + '/models.py', 'r')
-        generator = ModelGenerator(model_name, model_skeleton, models_file_res, self)
+        generator = ModelGenerator(model_name, model_skeleton, models_file_res, self, options['include_gallery'])
         finished = False
 
         self.stdout.write(self.style.SUCCESS('Welcome to model generator!\n'))

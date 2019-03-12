@@ -10,4 +10,17 @@ class {{ model_name }}(AbstractModel):
 
     def __unicode__(self):
         return str(self.pk)
+{% if include_gallery %}
+
+class {{ gallery_model }}(AbstractModel):
+    class Meta:
+        verbose_name_plural = '{{ gallery_model }}'
+        verbose_name = '{{ gallery_model }}'
+
+    image = models.ImageField(verbose_name='image', null=False)
+    {{ model_name_lower }} = models.ForeignKey(verbose_name='{{ model_name_lower }}', to={{ model_name }}, related_name='gallery', null=False, on_delete=models.CASCADE)
+
+    def __unicode__(self):
+        return str(self.pk)
+{% endif %}
 {% endautoescape %}

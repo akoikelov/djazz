@@ -23,10 +23,11 @@ class ModelGenerator(object):
         'ManyToManyField'
     ]
 
-    def __init__(self, model_name, model_skeleton, models_file_resource, command_instance):
+    def __init__(self, model_name, model_skeleton, models_file_resource, command_instance, include_gallery):
         self.model_name = model_name
         self.model_skeleton = model_skeleton
         self.models_file_resource = models_file_resource
+        self.include_gallery = include_gallery
         self.templates = dict(
             field='%s = models.%s(%s)',
             max_length='max_length=%s',
@@ -118,7 +119,9 @@ class ModelGenerator(object):
 
     def generate(self):
         template = Template(self.model_skeleton)
-        context = Context(dict(model_name=self.model_name, fields=self.fields))
+        context = Context(dict(model_name=self.model_name, fields=self.fields,
+                               include_gallery=self.include_gallery, gallery_model='%sGallery' % self.model_name,
+                               model_name_lower=self.model_name.lower()))
 
         generated = template.render(context)
 
