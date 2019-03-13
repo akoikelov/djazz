@@ -1,0 +1,4 @@
+
+
+class NikitaBadResponseException(Exception):
+    pass

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message>
+    <login>{{ login }}</login>
+    <pwd>{{ password }}</pwd>
+    <id>{{ id }}</id>
+    <sender>{{ sender }}</sender>
+    <text>{{ text }}</text>
+    <time></time>
+    <phones>
+        {% for phone in phones %}
+            <phone>{{ phone }}</phone>
+        {% endfor %}
+    </phones>
+    <test>{{ test }}</test>
+</message>
