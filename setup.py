@@ -48,7 +48,7 @@ setup(
     packages=packages,
     package_data=package_data,
     include_package_data=True,
-    install_requires=['django', 'setuptools', 'dropbox', 'unidecode', 'psycopg2', 'Faker'],
+    install_requires=['django', 'setuptools', 'dropbox', 'unidecode', 'Faker'],
     url='https://github.com/akoikelov/djazz',
     license='',
     author='akoikelov',

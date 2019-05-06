@@ -2,5 +2,4 @@ django
 setuptools
 dropbox
 unidecode
-psycopg2
 Faker
