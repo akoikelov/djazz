@@ -22,6 +22,9 @@ class ModelGenerator(object):
     FIELD_TYPES_WITHOUT_NULL_OPTION = [
         'ManyToManyField'
     ]
+    FIELD_TYPES_WITH_UPLOAD_TO = [
+        'ImageField', 'FileField'
+    ]
 
     def __init__(self, model_name, model_skeleton, models_file_resource, command_instance, include_gallery):
         self.model_name = model_name
@@ -41,7 +44,8 @@ class ModelGenerator(object):
             to='to=%s',
             through='through=\'%s\'',
             through_fields='through_fields=(\'%s\', \'%s\')',
-            related_name='related_name=\'%s\''
+            related_name='related_name=\'%s\'',
+            upload_to='upload_to=\'%s\''
         )
         self.fieldTypePairs = dict(
             char='CharField', text='TextField', date='DateField', datetime='DateTimeField',
@@ -111,6 +115,11 @@ class ModelGenerator(object):
 
             if nullable == 'True':
                 field_options += ', blank=True'
+
+        if field_type in self.FIELD_TYPES_WITH_UPLOAD_TO:
+            upload_to = self.templates['upload_to'] % ('%s/%s' % (self.model_name.lower(), field_name))
+
+            field_options += ', %s' % upload_to
 
         self.command_instance.stdout.write('\n')
         self.fields.append(self.templates['field'] % (field_name, field_type, field_options))
